@@ -20,7 +20,7 @@ script:
   - docker tag udagram-frontend binlv2011/udagram-frontend:v1
   - docker build -t udagram-reverseproxy ./udagram-reverseproxy
   - docker tag udagram-reverseproxy binlv2011/udagram-reverseproxy:v1
-  - echo "-------- All images successfully built ----------"
+  - echo "-------- All images successfully built -----------"
 
 after_success:
   - echo "------- Logging in to Docker Hub --------"
