@@ -1,14 +1,15 @@
-language: generic
+language: node_js
+node_js:
+  - 12
 
 services:
   - docker
 
-before_install:
-  - echo "--------- Installing dependencies -----------"
-  - sudo curl -LO https://nodejs.org/dist/v16.0.0/node-v16.0.0-linux-x64.tar.xz
-  - sudo tar -xvf node-v16.0.0-linux-x64.tar.xz
-  - sudo cp -r node-v16.0.0-linux-x64/{bin,include,lib,share} /usr/
-  - node --version
+install:
+  - echo "nothing needs to be installed"
+
+before_script:
+  - echo "Test"
 
 script:
   - echo "--------- The images are Building ------------"
