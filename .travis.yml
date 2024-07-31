@@ -11,7 +11,7 @@ before_install:
   - node --version
 
 script:
-  - echo "--------- The images are Building ------------"
+  - echo "--------- The images are Building -------------"
   - docker build -t udagram-api-feed ./udagram-api-feed
   - docker tag udagram-api-feed binlv2011/udagram-api-feed:v1
   - docker build -t udagram-api-user ./udagram-api-user
