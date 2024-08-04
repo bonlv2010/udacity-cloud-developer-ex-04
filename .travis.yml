@@ -1,35 +1,40 @@
-language: generic
+language: node_js
+node_js:
+  - 12
 
 services:
   - docker
 
-before_install:
-  - echo "--------- Installing dependencies -----------"
-  - sudo curl -LO https://nodejs.org/dist/v16.0.0/node-v16.0.0-linux-x64.tar.xz
-  - sudo tar -xvf node-v16.0.0-linux-x64.tar.xz
-  - sudo cp -r node-v16.0.0-linux-x64/{bin,include,lib,share} /usr/
-  - node --version
+# Pre-testing installs
+install:
+  - echo "nothing needs to be installed"
+
+# Scripts to be run such as tests
+before_script:
+  - echo "no testsss"
 
 script:
-  - echo "--------- The images are Building ------------"
+  - docker --version
+  # build containers
   - docker build -t udagram-api-feed ./udagram-api-feed
-  - docker tag udagram-api-feed binlv2011/udagram-api-feed:v1
   - docker build -t udagram-api-user ./udagram-api-user
-  - docker tag udagram-api-user binlv2011/udagram-api-user:v1
   - docker build -t udagram-frontend ./udagram-frontend
-  - docker tag udagram-frontend binlv2011/udagram-frontend:v1
   - docker build -t udagram-reverseproxy ./udagram-reverseproxy
-  - docker tag udagram-reverseproxy binlv2011/udagram-reverseproxy:v1
-  - echo "-------- All images successfully built ----------"
+  # tag containers
+  - docker tag udagram-api-feed lamnt18061999/udagram-api-feed:v4a
+  - docker tag udagram-api-user lamnt18061999/udagram-api-user:v4a
+  - docker tag udagram-frontend lamnt18061999/udagram-frontend:v4a
+  - docker tag udagram-reverseproxy lamnt18061999/udagram-reverseproxy:v4a
 
+# Tasks to perform after the process is successful. Formatting the Docker username and password as below enables you to programmatically log in without having the password exposed in logs.
 after_success:
-  - echo "------- Logging in to Docker Hub --------"
-  - echo "$DOCKER_PASSWORD" | docker login -u "binlv2011" --password-stdin
-  - echo "-------------- Pushing images to Docker Hub -------"
-  - docker push binlv2011/udagram-api-feed:v1
-  - docker push binlv2011/udagram-api-user:v1
-  - docker push binlv2011/udagram-frontend:v1
-  - docker push binlv2011/udagram-reverseproxy:v1
-
-notifications:
-  email: false
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push lamnt18061999/udagram-api-user:v4a
+  - docker push lamnt18061999/udagram-api-feed:v4a
+  - docker push lamnt18061999/udagram-frontend:v4a
+  - docker push lamnt18061999/udagram-reverseproxy:v4a
+  
+  - docker pull lamnt18061999/udagram-api-user:v4a
+  - docker pull lamnt18061999/udagram-api-feed:v4a
+  - docker pull lamnt18061999/udagram-frontend:v4a
+  - docker pull lamnt18061999/udagram-reverseproxy:v4a
